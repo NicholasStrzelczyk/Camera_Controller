@@ -151,7 +151,7 @@ if __name__ == '__main__':
     # Script Configuration
     use_webcam = False              # controls whether webcam is used instead of 5G camera (debugging)
     show_window = False             # controls whether live stream is shown during capture routine (debugging)
-    verbose = False                 # controls whether log msgs are printed to console (debugging)
+    verbose = True                 # controls whether log msgs are printed to console (debugging)
     send_emails = False              # controls whether notification emails are sent in specific situations
     data_dir = "./data"             # base img file location
     current_dir = ""                # global variable for where img files are currently being saved
