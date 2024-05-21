@@ -149,14 +149,14 @@ def exit_handler():
 if __name__ == '__main__':
 
     # Script Configuration
-    use_webcam = True              # controls whether webcam is used instead of 5G camera (debugging)
-    show_window = True             # controls whether live stream is shown during capture routine (debugging)
-    verbose = True                 # controls whether log msgs are printed to console (debugging)
+    use_webcam = False              # controls whether webcam is used instead of 5G camera (debugging)
+    show_window = False             # controls whether live stream is shown during capture routine (debugging)
+    verbose = False                 # controls whether log msgs are printed to console (debugging)
     send_emails = False              # controls whether notification emails are sent in specific situations
     data_dir = "./data"             # base img file location
     current_dir = ""                # global variable for where img files are currently being saved
-    live_duration = 5               # minutes during which the camera is live (5 minutes)
-    photo_interval = 90             # seconds between each photograph during a live block (90 seconds)
+    live_duration = 3               # minutes during which the camera is live (5 minutes)
+    photo_interval = 50             # seconds between each photograph during a live block (90 seconds)
     atexit.register(exit_handler)   # runs a routine to notify us if the script exits
 
     # Camera Connection Configuration
@@ -165,20 +165,37 @@ if __name__ == '__main__':
     camera_url = "rtsp://{}:{}/main".format(ip_address, rtsp_port)
 
     # Schedule Configuration
-    schedule.every().day.at("06:00").do(capture_routine)      # 6am
-    schedule.every().day.at("07:00").do(capture_routine)      # 7am
-    schedule.every().day.at("08:00").do(capture_routine)      # 8am
-    schedule.every().day.at("09:00").do(capture_routine)      # 9am
-    schedule.every().day.at("10:00").do(capture_routine)      # 10am
-    schedule.every().day.at("11:00").do(capture_routine)      # 11am
-    schedule.every().day.at("12:00").do(capture_routine)      # 12pm
-    schedule.every().day.at("13:00").do(capture_routine)      # 1pm
-    schedule.every().day.at("14:00").do(capture_routine)      # 2pm
-    schedule.every().day.at("15:00").do(capture_routine)      # 3pm
-    schedule.every().day.at("16:00").do(capture_routine)      # 4pm
-    schedule.every().day.at("17:00").do(capture_routine)      # 5pm
-    schedule.every().day.at("18:00").do(capture_routine)      # 6pm
+    # schedule.every().day.at("06:00").do(capture_routine)      # 6am
+    # schedule.every().day.at("07:00").do(capture_routine)      # 7am
+    # schedule.every().day.at("08:00").do(capture_routine)      # 8am
+    # schedule.every().day.at("09:00").do(capture_routine)      # 9am
+    # schedule.every().day.at("10:00").do(capture_routine)      # 10am
+    # schedule.every().day.at("11:00").do(capture_routine)      # 11am
+    # schedule.every().day.at("12:00").do(capture_routine)      # 12pm
+    # schedule.every().day.at("13:00").do(capture_routine)      # 1pm
+    # schedule.every().day.at("14:00").do(capture_routine)      # 2pm
+    # schedule.every().day.at("15:00").do(capture_routine)      # 3pm
+    # schedule.every().day.at("16:00").do(capture_routine)      # 4pm
+    # schedule.every().day.at("17:00").do(capture_routine)      # 5pm
+    # schedule.every().day.at("18:00").do(capture_routine)      # 6pm
+
     # schedule.every(90).seconds.do(capture_routine)  # debugging
+
+    schedule.every().day.at("05:56").do(capture_routine)  # testing
+    schedule.every().day.at("06:30").do(capture_routine)  # testing
+    schedule.every().day.at("07:01").do(capture_routine)  # testing
+
+    schedule.every().day.at("10:33").do(capture_routine)  # testing
+
+    schedule.every().day.at("11:56").do(capture_routine)  # testing
+    schedule.every().day.at("12:45").do(capture_routine)  # testing
+    schedule.every().day.at("13:01").do(capture_routine)  # testing
+
+    schedule.every().day.at("16:03").do(capture_routine)  # testing
+
+    schedule.every().day.at("17:56").do(capture_routine)  # testing
+    schedule.every().day.at("18:30").do(capture_routine)  # testing
+    schedule.every().day.at("19:01").do(capture_routine)  # testing
 
     # Log initialization
     logging.getLogger().setLevel(logging.INFO)
