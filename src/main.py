@@ -105,7 +105,7 @@ def capture_routine():
         cv2.waitKey(100)
 
     # Summarize Results
-    log("captured {} images during {} block".format(img_counter, max_images))
+    log("captured {} images during {} block".format(img_counter, current_hour_str))
 
     # Garbage collection
     log("closing connection to camera")
