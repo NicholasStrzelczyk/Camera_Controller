@@ -169,7 +169,7 @@ if __name__ == '__main__':
 	summary_str = "script variables:"
 	summary_str = summary_str + "\n\tverbose = {}".format(verbose)
 	summary_str = summary_str + "\n\tsend_emails = {}".format(send_emails)
-	summary_str = summary_str + "\n\tlive_duration = {} min".format(video_duration)
+	summary_str = summary_str + "\n\tvideo_duration = {} min".format(video_duration)
 	summary_str = summary_str + "\n\tphotos_per_block = {}".format(photos_per_block)
 	summary_str = summary_str + "\n\tvideo_fps = {}".format(video_fps)
 	summary_str = summary_str + "\n\tdata_directory = \"{}\"".format(data_dir)
