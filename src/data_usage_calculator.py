@@ -72,6 +72,7 @@ if __name__ == '__main__':
 	print("--- Uncompressed Estimates ---")
 	for fps in fps_list:
 		print_estimates(calc_uncompressed_estimates(img_size, fps, daily_intervals, length_of_intervals), fps)
+
 	print("------------------------------")
 	print("---- Compressed Estimates ----")
 	print_estimates(calc_compressed_estimates(bit_rate_kbps, daily_intervals, length_of_intervals))
