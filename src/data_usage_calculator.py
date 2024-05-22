@@ -1,4 +1,3 @@
-
 #########################################################
 #                                                       #
 #   THIS CODE IS UNFINISHED AND UNTESTED FOR ACCURACY   #
@@ -22,6 +21,7 @@ def calc_compressed_estimates(bitrate, intervals, interval_len):
 	}
 	return estimates
 
+
 def calc_uncompressed_estimates(img_size, fps, intervals, interval_len):
 	global MB_to_MiB
 
@@ -43,6 +43,7 @@ def calc_uncompressed_estimates(img_size, fps, intervals, interval_len):
 	}
 	return estimates
 
+
 def print_estimates(estimates, fps=None):
 	if fps is None:
 		print("Daily Estimate: {:,.2f} MiB".format(estimates['d']))
@@ -56,15 +57,15 @@ def print_estimates(estimates, fps=None):
 
 
 if __name__ == '__main__':
-	MB_to_MiB = 1.048576        # 1 MiB = this many MB (global constant)
-	kbps_to_MiBps = 1048.58     # 1 MiBps = this many kbps (global constant)
+	MB_to_MiB = 1.048576  # 1 MiB = this many MB (global constant)
+	kbps_to_MiBps = 1048.58  # 1 MiBps = this many kbps (global constant)
 
 	# -- Variables for estimates --
-	img_size = (704, 576)       # pixels (length, width)
-	fps_list = [25, 15, 10]     # fps
-	daily_intervals = 13        # live blocks scheduled per day
-	length_of_intervals = 10    # minutes
-	bit_rate_kbps = 2048        # kilo-bit per second
+	img_size = (704, 576)  # pixels (length, width)
+	fps_list = [25, 15, 10]  # fps
+	daily_intervals = 15  # live blocks scheduled per day
+	length_of_intervals = 2  # minutes
+	bit_rate_kbps = 2048  # kilo-bit per second
 
 	# ------------------------- #
 
@@ -77,4 +78,4 @@ if __name__ == '__main__':
 	print("---- Compressed Estimates ----")
 	print_estimates(calc_compressed_estimates(bit_rate_kbps, daily_intervals, length_of_intervals))
 
-	# ------------------------- #
+# ------------------------- #
