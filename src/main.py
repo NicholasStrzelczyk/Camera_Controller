@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 import schedule
 
-from src import helper
+import helper
 
 
 def log(msg, level=logging.INFO):
