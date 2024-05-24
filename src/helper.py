@@ -1,20 +1,26 @@
 from datetime import datetime
 
+debug_schedule_weekdays = [
+	"05:56", "06:30", "07:01", "10:33", "11:56", "12:30",
+	"13:01", "16:03", "17:56", "18:30", "19:01"
+]
+debug_schedule_weekends = [
+	"05:56", "06:30", "07:01", "11:56", "12:30",
+	"13:01", "17:56", "18:30", "19:01"
+]
+
 
 def get_email_recipient_list(path):
 	with open(path, "r") as file:
 		emails = file.readlines()
 	emails = [e.strip("\n") for e in emails]
-	print(emails)  # debugging
 	return emails
 
 
-def get_email_credentials(path):
+def get_smtp_api_key(path):
 	with open(path, "r") as file:
-		creds = file.readlines()
-	creds = [c.strip("\n") for c in creds]
-	print(creds)  # debugging
-	return creds[0], creds[1]
+		key = file.readline()
+	return key
 
 
 def get_current_hour_str():

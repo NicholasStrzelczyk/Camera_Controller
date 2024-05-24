@@ -95,7 +95,7 @@ def capture_routine():
 
 
 def exit_handler():
-	log("ending script...\n##################################################", logging.FATAL)
+	log("exiting script...\n##################################################", logging.FATAL)
 	return
 
 
@@ -103,14 +103,14 @@ if __name__ == '__main__':
 
 	# Script Configuration
 	verbose = True  # controls whether log msgs are printed to console (debugging)
-	send_emails = False  # controls whether notification emails are sent in specific situations
+	send_emails = True  # controls whether notification emails are sent in specific situations
 	video_duration = 1  # minutes during which the video is being recorded (1 minute)
 	photos_per_block = 3  # number of photos taken during capture routine (3 photos)
 	video_fps = 25  # fps of saved video recording (matches fps of camera feed)
 	data_dir = "./data"  # base img file location
 	current_dir = ""  # global variable for where img files are currently being saved
 	log_path = "./capture_log.log"  # log file name and location
-	email_creds_path = "./../email_creds.txt"  # location of file containing email credentials
+	api_key_path = "./../email_api_key.txt"  # location of file containing email server api key
 	email_list_path = "./../email_list.txt"  # location of file containing recipient emails for notifications
 	atexit.register(exit_handler)  # runs a routine to notify us if the script exits
 
@@ -125,13 +125,17 @@ if __name__ == '__main__':
 		"11:00", "12:00", "13:00", "14:00", "15:00",
 		"16:00", "17:00", "18:00", "19:00", "20:00"
 	]
-	schedule_times_debug = [  # for testing the script
-		"05:56", "06:30", "07:01", "10:33", "11:56", "12:30",
-		"13:01", "16:03", "17:56", "18:30", "19:01"
-	]
-	for t in schedule_times_debug:
-		schedule.every().day.at(t).do(capture_routine)
-	# schedule.every(90).seconds.do(capture_routine)  # for local debugging
+	# for t in schedule_times:
+	# 	schedule.every().day.at(t).do(capture_routine)
+	for t in helper.debug_schedule_weekdays:  # TESTING
+		schedule.every().monday.at(t).do(capture_routine)
+		schedule.every().tuesday.at(t).do(capture_routine)
+		schedule.every().wednesday.at(t).do(capture_routine)
+		schedule.every().thursday.at(t).do(capture_routine)
+		schedule.every().friday.at(t).do(capture_routine)
+	for t in helper.debug_schedule_weekends:  # TESTING
+		schedule.every().saturday.at(t).do(capture_routine)
+		schedule.every().sunday.at(t).do(capture_routine)
 
 	# Log initialization
 	logging.getLogger().setLevel(logging.INFO)
@@ -151,13 +155,14 @@ if __name__ == '__main__':
 
 	# Optional log email handler initialization
 	if send_emails:
-		email_credentials = helper.get_email_credentials(email_creds_path)
+		api_key = helper.get_smtp_api_key(api_key_path)
+		recipients = helper.get_email_recipient_list(email_list_path)
 		email_handler = logging.handlers.SMTPHandler(
-			mailhost=("smtp.mail.yahoo.com", 587),
-			fromaddr=email_credentials[0],
-			toaddrs=helper.get_email_recipient_list(email_list_path)[0],
-			subject="Cooling Tower Capture Script Alert",
-			credentials=email_credentials,
+			mailhost=("smtp.sendgrid.net", 587),
+			fromaddr=recipients[0],
+			toaddrs=recipients,
+			subject="[ALERT] 5G Camera Capture Script",
+			credentials=("apikey", api_key),
 			secure=()
 		)
 		email_handler.setFormatter(log_formatter)
@@ -165,7 +170,7 @@ if __name__ == '__main__':
 		logging.getLogger().addHandler(email_handler)
 
 	# Begin script
-	log("starting script...", logging.CRITICAL)
+	log("starting script...")
 	summary_str = "script variables:"
 	summary_str = summary_str + "\n\tverbose = {}".format(verbose)
 	summary_str = summary_str + "\n\tsend_emails = {}".format(send_emails)
@@ -174,32 +179,11 @@ if __name__ == '__main__':
 	summary_str = summary_str + "\n\tvideo_fps = {}".format(video_fps)
 	summary_str = summary_str + "\n\tdata_directory = \"{}\"".format(data_dir)
 	summary_str = summary_str + "\n\tlog_path = \"{}\"".format(log_path)
-	summary_str = summary_str + "\n\temail_creds_path = \"{}\"".format(email_creds_path)
+	summary_str = summary_str + "\n\tapi_key_path = \"{}\"".format(api_key_path)
 	summary_str = summary_str + "\n\temail_list_path = \"{}\"".format(email_list_path)
 	summary_str = summary_str + "\n\tcamera_url = \"{}\"".format(camera_url)
 	summary_str = summary_str + "\n\tnum_of_scheduled_jobs = {}".format(len(schedule.jobs))
 	log(summary_str)
-
-	##########################################################################
-	##########################################################################
-	##########################################################################
-	# creds = get_email_credentials(email_creds_path)
-	# recipient = get_email_recipient_list(email_list_path)[0]
-	# with smtplib.SMTP_SSL("smtp.mail.yahoo.com", port=465) as connection:
-	# 	connection.set_debuglevel(1)
-	# 	connection.login(
-	# 		user=creds[0],
-	# 		password=creds[1]
-	# 	)
-	# 	connection.sendmail(
-	# 		from_addr=creds[0],
-	# 		to_addrs=recipient,
-	# 		msg=f"Subject:Text\n\n"
-	# 		    f"Body of the text"
-	# 	)
-	##########################################################################
-	##########################################################################
-	##########################################################################
 
 	while True:
 		schedule.run_pending()
