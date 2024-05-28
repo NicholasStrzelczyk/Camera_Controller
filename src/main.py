@@ -41,7 +41,7 @@ def capture_routine():
 	# Initialize variables
 	img_counter = 0
 	fail_counter = 0
-	max_failures = 10
+	max_failures = video_fps
 	current_date_str = str(date.today()).replace("-", "_")
 	current_hour_str = helper.get_current_hour_str()
 	video_fourcc = cv2.VideoWriter.fourcc(*'mp4v')
@@ -72,8 +72,8 @@ def capture_routine():
 		if fail_counter >= max_failures:
 			log("exceeded maximum number of failures to grab frame, exiting capture routine", logging.ERROR)
 			break
-		# Stop conditions
-		if img_counter == photos_per_block or datetime.now() >= end_time:
+		# Stop condition(s)
+		if datetime.now() >= end_time:
 			log("stop condition met, concluding capture routine")
 			break
 
@@ -87,6 +87,10 @@ def capture_routine():
 			next_photo_time = datetime.now() + timedelta(seconds=photo_interval)
 			img_counter += 1
 
+	# Check if at least one image was saved
+	if img_counter == 0:
+		log("failed to capture any images during this block", logging.ERROR)
+
 	# Release resources
 	log("closing connection to camera")
 	cam.release()
@@ -98,6 +102,11 @@ def exit_handler():
 	log("exiting script...\n##################################################", logging.FATAL)
 	return
 
+
+# TODO:
+#   - implement rotating log files (or just a way to keep logs from getting too long)
+#   - determine camera startup and shutdown time for more accurate scheduling
+#   - find more error scenarios
 
 if __name__ == '__main__':
 
