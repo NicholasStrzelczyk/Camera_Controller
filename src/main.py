@@ -4,6 +4,7 @@ import logging.handlers
 import os
 import sys
 import time
+import traceback
 from datetime import datetime, timedelta, date
 
 import cv2
@@ -98,9 +99,8 @@ def capture_routine():
 	log("capture routine has concluded")
 
 
-def exit_handler():
-	log("exiting script...\n##################################################", logging.FATAL)
-	return
+def exit_handler():  # Can only be called via a SystemExit
+	log("exiting script...\n##################################################")
 
 
 # TODO:
@@ -121,7 +121,6 @@ if __name__ == '__main__':
 	log_path = "./capture_log.log"  # log file name and location
 	api_key_path = "./../email_api_key.txt"  # location of file containing email server api key
 	email_list_path = "./../email_list.txt"  # location of file containing recipient emails for notifications
-	atexit.register(exit_handler)  # runs a routine to notify us if the script exits
 
 	# Camera Connection Configuration
 	ip_address = "174.90.198.126"
@@ -145,6 +144,9 @@ if __name__ == '__main__':
 	for t in helper.debug_schedule_weekends:  # TESTING
 		schedule.every().saturday.at(t).do(capture_routine)
 		schedule.every().sunday.at(t).do(capture_routine)
+
+	# Set up exit handler
+	atexit.register(exit_handler)
 
 	# Log initialization
 	logging.getLogger().setLevel(logging.INFO)
@@ -195,5 +197,12 @@ if __name__ == '__main__':
 	log(summary_str)
 
 	while True:
-		schedule.run_pending()
-		time.sleep(1)
+		try:
+			schedule.run_pending()
+			time.sleep(1)
+		except KeyboardInterrupt:  # avoids notification if script is manually terminated
+			log("user shut down script with \"ctrl + c\" command")
+			sys.exit(0)
+		except BaseException as e:  # sends notification if script terminated due to any other exception
+			log("script failure due to exception:\n{}".format(traceback.format_exc()), logging.CRITICAL)
+			sys.exit(1)
