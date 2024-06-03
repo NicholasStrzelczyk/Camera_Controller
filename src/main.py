@@ -133,17 +133,17 @@ if __name__ == '__main__':
 		"11:00", "12:00", "13:00", "14:00", "15:00",
 		"16:00", "17:00", "18:00", "19:00", "20:00"
 	]
-	# for t in schedule_times:
-	# 	schedule.every().day.at(t).do(capture_routine)
-	for t in helper.debug_schedule_weekdays:  # TESTING
-		schedule.every().monday.at(t).do(capture_routine)
-		schedule.every().tuesday.at(t).do(capture_routine)
-		schedule.every().wednesday.at(t).do(capture_routine)
-		schedule.every().thursday.at(t).do(capture_routine)
-		schedule.every().friday.at(t).do(capture_routine)
-	for t in helper.debug_schedule_weekends:  # TESTING
-		schedule.every().saturday.at(t).do(capture_routine)
-		schedule.every().sunday.at(t).do(capture_routine)
+	for t in schedule_times:
+		schedule.every().day.at(t).do(capture_routine)
+	# for t in helper.debug_schedule_weekdays:  # TESTING
+	# 	schedule.every().monday.at(t).do(capture_routine)
+	# 	schedule.every().tuesday.at(t).do(capture_routine)
+	# 	schedule.every().wednesday.at(t).do(capture_routine)
+	# 	schedule.every().thursday.at(t).do(capture_routine)
+	# 	schedule.every().friday.at(t).do(capture_routine)
+	# for t in helper.debug_schedule_weekends:  # TESTING
+	# 	schedule.every().saturday.at(t).do(capture_routine)
+	# 	schedule.every().sunday.at(t).do(capture_routine)
 
 	# Set up exit handler
 	atexit.register(exit_handler)

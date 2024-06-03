@@ -64,7 +64,7 @@ if __name__ == '__main__':
 	img_size = (704, 576)  # pixels (length, width)
 	fps_list = [25, 15, 10]  # fps
 	daily_intervals = 15  # live blocks scheduled per day
-	length_of_intervals = 2  # minutes
+	length_of_intervals = 1  # minutes
 	bit_rate_kbps = 2048  # kilo-bit per second
 
 	# ------------------------- #
