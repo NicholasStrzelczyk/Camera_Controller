@@ -39,21 +39,17 @@ def capture_routine():
 	log("starting capture routine")
 	setup_directories()
 
-	# Initialize variables
+	# Initialize routine variables
 	img_counter = 0
 	fail_counter = 0
-	max_failures = video_fps
 	current_date_str = str(date.today()).replace("-", "_")
 	current_hour_str = helper.get_current_hour_str()
 	video_fourcc = cv2.VideoWriter.fourcc(*'mp4v')
 	base_img_filename = "{}/{}_{}_snapshot".format(current_dir, current_date_str, current_hour_str)
 	vid_filename = "{}/{}_{}_video.mp4".format(current_dir, current_date_str, current_hour_str)
 	photo_interval = np.floor((video_duration * 60) / (photos_per_block + 1)) + (video_duration * photos_per_block)
-	end_time = datetime.now() + timedelta(minutes=video_duration)
-	next_photo_time = datetime.now() + timedelta(seconds=photo_interval)
 
-	# Initialize connection to camera
-	log("initializing rtsp camera device")
+	# Initialize connection to camera and video writer
 	cam = cv2.VideoCapture(camera_url)
 	video_dims = (int(cam.get(3)), int(cam.get(4)))
 	video_out = cv2.VideoWriter(vid_filename, video_fourcc, video_fps, video_dims)
@@ -63,21 +59,18 @@ def capture_routine():
 		log("camera not open, cannot extract feed, exiting routine", logging.ERROR)
 		return
 
-	while True:
+	log("starting recording")
+
+	# Set up video and photo timing
+	next_photo_time = datetime.now() + timedelta(seconds=photo_interval)
+	end_time = datetime.now() + timedelta(minutes=video_duration)
+
+	while datetime.now() < end_time:
 		# Grab frame from camera
 		success, frame = cam.read()
 		if not success:
 			log("failed to grab frame from camera feed", logging.WARNING)
 			fail_counter += 1
-		# End routine if too many failures
-		if fail_counter >= max_failures:
-			log("exceeded maximum number of failures to grab frame, exiting capture routine", logging.ERROR)
-			break
-		# Stop condition(s)
-		if datetime.now() >= end_time:
-			log("stop condition met, concluding capture routine")
-			break
-
 		# Write the frame to video file
 		video_out.write(frame)
 		# Save snapshot of current frame
@@ -88,12 +81,15 @@ def capture_routine():
 			next_photo_time = datetime.now() + timedelta(seconds=photo_interval)
 			img_counter += 1
 
-	# Check if at least one image was saved
+	log("recording complete")
+
+	# Check if any errors occurred and notify if necessary
 	if img_counter == 0:
 		log("failed to capture any images during this block", logging.ERROR)
+	if fail_counter > 0:
+		log("failed to grab frame {} times during routine".format(fail_counter), logging.ERROR)
 
 	# Release resources
-	log("closing connection to camera")
 	cam.release()
 	video_out.release()
 	log("capture routine has concluded")
@@ -113,7 +109,7 @@ if __name__ == '__main__':
 	# Script Configuration
 	verbose = True  # controls whether log msgs are printed to console (debugging)
 	send_emails = True  # controls whether notification emails are sent in specific situations
-	video_duration = 1.25  # minutes during which the video is being recorded (default is 1 min)
+	video_duration = 1  # minutes during which the video is being recorded (default is 1 min)
 	photos_per_block = 3  # number of photos taken during capture routine (default is 3 photos)
 	video_fps = 25  # fps of saved video recording (matches fps of camera feed)
 	data_dir = "/mnt/storage_1/PdM5g/"  # base data location
