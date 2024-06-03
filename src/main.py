@@ -113,8 +113,8 @@ if __name__ == '__main__':
 	# Script Configuration
 	verbose = True  # controls whether log msgs are printed to console (debugging)
 	send_emails = True  # controls whether notification emails are sent in specific situations
-	video_duration = 1  # minutes during which the video is being recorded (1 minute)
-	photos_per_block = 3  # number of photos taken during capture routine (3 photos)
+	video_duration = 1.25  # minutes during which the video is being recorded (default is 1 min)
+	photos_per_block = 3  # number of photos taken during capture routine (default is 3 photos)
 	video_fps = 25  # fps of saved video recording (matches fps of camera feed)
 	data_dir = "/mnt/storage_1/PdM5g/"  # base data location
 	current_dir = ""  # global variable for where img files are currently being saved
