@@ -47,7 +47,7 @@ def capture_routine():
 	video_fourcc = cv2.VideoWriter.fourcc(*'mp4v')
 	base_img_filename = "{}/{}_{}_snapshot".format(current_dir, current_date_str, current_hour_str)
 	vid_filename = "{}/{}_{}_video.mp4".format(current_dir, current_date_str, current_hour_str)
-	photo_interval = np.floor((video_duration * 60) / (photos_per_block + 1)) + (video_duration * photos_per_block)
+	photo_interval = np.floor((video_duration / (photos_per_block + 1)) + photos_per_block)
 
 	# Initialize connection to camera and video writer
 	cam = cv2.VideoCapture(camera_url)
@@ -63,7 +63,7 @@ def capture_routine():
 
 	# Set up video and photo timing
 	next_photo_time = datetime.now() + timedelta(seconds=photo_interval)
-	end_time = datetime.now() + timedelta(minutes=video_duration)
+	end_time = datetime.now() + timedelta(seconds=video_duration)
 
 	while datetime.now() < end_time:
 		# Grab frame from camera
@@ -94,6 +94,9 @@ def capture_routine():
 	video_out.release()
 	log("capture routine has concluded")
 
+	info_dur, info_fps = helper.get_recording_details(vid_filename)
+	log("recording taken: length={}, fps={}".format(info_dur, info_fps))
+
 
 def exit_handler():  # Can only be called via a SystemExit
 	log("exiting script...\n##################################################")
@@ -109,10 +112,10 @@ if __name__ == '__main__':
 	# Script Configuration
 	verbose = True  # controls whether log msgs are printed to console (debugging)
 	send_emails = True  # controls whether notification emails are sent in specific situations
-	video_duration = 1  # minutes during which the video is being recorded (default is 1 min)
+	video_duration = 62  # seconds during which the video is being recorded (default is 60 sec)
 	photos_per_block = 3  # number of photos taken during capture routine (default is 3 photos)
 	video_fps = 25  # fps of saved video recording (matches fps of camera feed)
-	data_dir = "/mnt/storage_1/PdM5g/"  # base data location
+	data_dir = "/mnt/storage_1/PdM5g"  # base data location
 	current_dir = ""  # global variable for where img files are currently being saved
 	log_path = "./capture_log.log"  # log file name and location
 	api_key_path = "./../email_api_key.txt"  # location of file containing email server api key
@@ -181,7 +184,7 @@ if __name__ == '__main__':
 	summary_str = "script variables:"
 	summary_str = summary_str + "\n\tverbose = {}".format(verbose)
 	summary_str = summary_str + "\n\tsend_emails = {}".format(send_emails)
-	summary_str = summary_str + "\n\tvideo_duration = {} min".format(video_duration)
+	summary_str = summary_str + "\n\tvideo_duration = {} sec".format(video_duration)
 	summary_str = summary_str + "\n\tphotos_per_block = {}".format(photos_per_block)
 	summary_str = summary_str + "\n\tvideo_fps = {}".format(video_fps)
 	summary_str = summary_str + "\n\tdata_directory = \"{}\"".format(data_dir)

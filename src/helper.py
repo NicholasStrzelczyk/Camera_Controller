@@ -1,5 +1,7 @@
 from datetime import datetime
 
+import cv2
+
 debug_schedule_weekdays = [
 	"05:56", "06:30", "07:01", "10:33", "11:56", "12:30",
 	"13:01", "16:03", "17:56", "18:30", "19:01"
@@ -32,3 +34,11 @@ def get_current_hour_str():
 	else:
 		result = "{}am".format(current_hour)
 	return result
+
+
+def get_recording_details(filename):
+	video = cv2.VideoCapture(filename)
+	duration = video.get(cv2.CAP_PROP_POS_MSEC)
+	frame_count = video.get(cv2.CAP_PROP_FRAME_COUNT)
+	video.release()
+	return duration, frame_count
