@@ -118,7 +118,7 @@ if __name__ == '__main__':
 	data_dir = "./../test_data"
 	current_dir = ""  # global variable for where img files are currently being saved
 	# log_path = "./capture_log.log"  # log file name and location
-	log_path = "./../test_data/test_capture_log.log"
+	log_path = "./../test_capture_log.log"
 	api_key_path = "./../email_api_key.txt"  # location of file containing email server api key
 	email_list_path = "./../email_list.txt"  # location of file containing recipient emails for notifications
 
