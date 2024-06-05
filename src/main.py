@@ -94,9 +94,6 @@ def capture_routine():
 	video_out.release()
 	log("capture routine has concluded")
 
-	info_dur, info_fps = helper.get_recording_details(vid_filename)
-	log("recording taken: length={}, fps={}".format(info_dur, info_fps))
-
 
 def exit_handler():  # Can only be called via a SystemExit
 	log("exiting script...\n##################################################")
@@ -134,15 +131,6 @@ if __name__ == '__main__':
 	]
 	for t in schedule_times:
 		schedule.every().day.at(t).do(capture_routine)
-	# for t in helper.debug_schedule_weekdays:  # TESTING
-	# 	schedule.every().monday.at(t).do(capture_routine)
-	# 	schedule.every().tuesday.at(t).do(capture_routine)
-	# 	schedule.every().wednesday.at(t).do(capture_routine)
-	# 	schedule.every().thursday.at(t).do(capture_routine)
-	# 	schedule.every().friday.at(t).do(capture_routine)
-	# for t in helper.debug_schedule_weekends:  # TESTING
-	# 	schedule.every().saturday.at(t).do(capture_routine)
-	# 	schedule.every().sunday.at(t).do(capture_routine)
 
 	# Set up exit handler
 	atexit.register(exit_handler)
