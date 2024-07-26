@@ -69,7 +69,8 @@ def capture_routine():
 		# Grab frame from camera
 		success, frame = cam.read()
 		if not success:
-			log("failed to grab frame from camera feed", logging.WARNING)
+			if fail_counter == 0:
+				log("failed to grab frame from camera feed", logging.WARNING)
 			fail_counter += 1
 		# Write the frame to video file
 		video_out.write(frame)

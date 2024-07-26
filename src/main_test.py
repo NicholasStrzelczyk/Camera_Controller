@@ -69,6 +69,8 @@ def capture_routine():
 		# Grab frame from camera
 		success, frame = cam.read()
 		if not success:
+			if fail_counter == 0:
+				log("failed to grab frame from camera feed", logging.WARNING)
 			fail_counter += 1
 		# Write the frame to video file
 		video_out.write(frame)
@@ -91,6 +93,7 @@ def capture_routine():
 	# Release resources
 	cam.release()
 	video_out.release()
+	log("capture routine has concluded")
 
 
 def exit_handler():  # Can only be called via a SystemExit
